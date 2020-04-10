@@ -26,7 +26,7 @@ kind: List
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
-  name: nodejs-pipeline-run-v1
+  name: service-a-pipeline-run-v1
 spec:
   params:
   - name: event-type
