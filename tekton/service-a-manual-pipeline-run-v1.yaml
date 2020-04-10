@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: nodejs-pipeline-run-v1
+spec:
+  params:
+  - name: event-type
+    value: push
+  - name: event-ref
+    value: refs/heads/master
+  - name: docker-imagename
+    value: service-a
+  - name: docker-imagetag
+    value: 1.0.0
+  serviceAccountName: kabanero-pipeline
+  timeout: "1h0m0s"
+  pipelineRef:
+    name: nodejs-express-build-deploy-pl
+  resources:
+    - name: git-source
+      resourceRef:
+        name: git-source-service-a-v1
+    - name: docker-image
+      resourceRef:
+        name: docker-image-service-a-v1
