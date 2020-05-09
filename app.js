@@ -20,7 +20,7 @@ tracer.registerExtractor(opentracing.FORMAT_HTTP_HEADERS, codec);
 opentracing.initGlobalTracer(tracer)
 
 app.get('/', (req, res) => {
-  res.send('Hello from Appsody!')
+  res.send('Hello from Appsody 2!')
 })
 
 // Tutorial begin: Transaction A-B
