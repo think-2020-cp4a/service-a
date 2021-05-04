@@ -1,15 +1,24 @@
 const app = require('express')()
 
+//
+// Tutorial begin: Remote requests to other applications
+//
 const uuid = require('uuid-random')
 const serviceTransaction = require('./serviceBroker.js')
+//
+// Tutorial end: Remote requests to other applications
+//
 
+//
+// Tutorial begin: OpenTracing initialization
+//
 const opentracing = require('opentracing')
 var initTracerFromEnv = require('jaeger-client').initTracerFromEnv
 var config = { serviceName: 'app-a-nodejs' }
 var options = {}
 var tracer = initTracerFromEnv(config, options)
 
-// This block is required for compatibility with the service meshes
+// This block is required for compatibility with the service meshes 
 // using B3 headers for header propagation
 // https://github.com/openzipkin/b3-propagation
 const ZipkinB3TextMapCodec = require('jaeger-client').ZipkinB3TextMapCodec
@@ -18,12 +27,15 @@ tracer.registerInjector(opentracing.FORMAT_HTTP_HEADERS, codec);
 tracer.registerExtractor(opentracing.FORMAT_HTTP_HEADERS, codec);
 
 opentracing.initGlobalTracer(tracer)
+//
+// Tutorial end: OpenTracing initialization
+//
 
 app.get('/', (req, res) => {
   res.send('Hello from Appsody 2!')
 })
 
-// Tutorial begin: Transaction A-B
+// Tutorial begin: Transaction A-B 
 app.get('/node-springboot', (req, res) => {
   const baseUrl = 'http://service-b:8080'
   const serviceCUrl = baseUrl + '/resource'
@@ -32,12 +44,14 @@ app.get('/node-springboot', (req, res) => {
   // https://opentracing-javascript.surge.sh/classes/tracer.html#extract
   const wireCtx = tracer.extract(opentracing.FORMAT_HTTP_HEADERS, req.headers)
   const span = tracer.startSpan(spanName, { childOf: wireCtx })
+  span.log({ event: 'request_received' })
 
-  const payload = { itemId: uuid(),
+  const payload = { itemId: uuid(), 
                     count: Math.floor(1 + Math.random() * 10)}
   serviceTransaction(serviceCUrl, payload, span)
     .then(() => {
       const finishSpan = () => {
+        span.log({ event : 'request_end'})
         span.finish()
       }
 
@@ -56,12 +70,14 @@ app.get('/node-jee', (req, res) => {
 
   const wireCtx = tracer.extract(opentracing.FORMAT_HTTP_HEADERS, req.headers)
   const span = tracer.startSpan(spanName, { childOf: wireCtx })
+  span.log({ event: 'request_received' })
 
-  const payload = { order: uuid(),
+  const payload = { order: uuid(), 
                     total: Math.floor(1 + Math.random() * 10000)}
   serviceTransaction(serviceCUrl, payload, span)
     .then(() => {
       const finishSpan = () => {
+        span.log({ event : 'request_end'})
         span.finish()
       }
 

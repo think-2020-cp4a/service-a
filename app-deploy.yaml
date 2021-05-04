@@ -7,21 +7,21 @@ metadata:
     build-date: 2020-01-30T08:16:17.662981
     commit.image.appsody.dev/author: Denilson Nastacio <dnastaci@us.ibm.com>
     commit.image.appsody.dev/committer: Denilson Nastacio <dnastaci@us.ibm.com>
-    commit.image.appsody.dev/date: Fri Apr 10 16:20:06 2020 -0400
-    commit.image.appsody.dev/message: first commit
-    commit.stack.appsody.dev/author: kilnerm <38245247+kilnerm@users.noreply.github.com>
+    commit.image.appsody.dev/date: Fri Apr 10 19:14:58 2020 -0400
+    commit.image.appsody.dev/message: Fix tekton pipeline
+    commit.stack.appsody.dev/author: Steve Groeger <groeges@uk.ibm.com>
     commit.stack.appsody.dev/committer: GitHub <noreply@github.com>
     commit.stack.appsody.dev/contextDir: /incubator/nodejs-express
-    commit.stack.appsody.dev/date: Fri Apr 3 09:22:57 2020 +0100
-    commit.stack.appsody.dev/message: 'Merge pull request #316 from groeges/release-0.6'
+    commit.stack.appsody.dev/date: Tue Mar 10 21:35:36 2020 +0000
+    commit.stack.appsody.dev/message: 'Merge pull request #313 from groeges/release-0.6'
     description: This image contains the Kabanero development stack for the Nodejs
       Express collection
     distribution-scope: public
     help: For more information visit https://github.com/sclorg/s2i-nodejs-container
-    image.opencontainers.org/created: "2020-04-10T18:13:04-04:00"
+    image.opencontainers.org/created: "2020-04-15T13:02:07-04:00"
     image.opencontainers.org/documentation: https://github.com/think-2020-cp4a/service-a
-    image.opencontainers.org/revision: 4814fc5a5d6c0765cf7ffa137d7401c3c9f50c09-modified
-    image.opencontainers.org/source: https://github.com/think-2020-cp4a/service-a/tree/master
+    image.opencontainers.org/revision: b714ea58b9d8c4cf81d95c659424e6cb4e9d9c81-modified
+    image.opencontainers.org/source: https://github.com/think-2020-cp4a/service-a/tree/v1
     image.opencontainers.org/url: https://github.com/think-2020-cp4a/service-a
     k8s.io/description: Node.js 10 available as container is a base platform for building
       and running various Node.js 10 applications and frameworks. Node.js is a platform
@@ -44,14 +44,14 @@ metadata:
     s2i.io/scripts-url: image:///usr/libexec/s2i
     s2i.openshift.io/scripts-url: image:///usr/libexec/s2i
     stack.appsody.dev/authors: Chris Bailey <cnbailey@gmail.com>, Neeraj Laad <neeraj.laad@gmail.com>
-    stack.appsody.dev/configured: docker.io/kabanerobeta/nodejs-express:0.2
-    stack.appsody.dev/created: "2020-04-03T08:53:09Z"
+    stack.appsody.dev/configured: docker.io/kabanero/nodejs-express:0.2
+    stack.appsody.dev/created: "2020-03-10T21:45:40Z"
     stack.appsody.dev/description: Express web framework for Node.js
     stack.appsody.dev/documentation: https://github.com/kabanero-io/collections/tree/master/incubator/nodejs-express/README.md
     stack.appsody.dev/licenses: Apache-2.0
-    stack.appsody.dev/revision: 27a3254c80e6c5367a76e6099c2e18b393d15841
+    stack.appsody.dev/revision: 5f7634c970b880bef90eeea4288153249e172d61
     stack.appsody.dev/source: https://github.com/kabanero-io/collections/tree/master/incubator/nodejs-express/image
-    stack.appsody.dev/tag: docker.io/kabanerobeta/nodejs-express:0.2.10
+    stack.appsody.dev/tag: docker.io/kabanero/nodejs-express:0.2.10
     stack.appsody.dev/title: Node.js Express
     stack.appsody.dev/url: https://github.com/kabanero-io/collections/tree/master/incubator/nodejs-express
     summary: Image for Kabanero Node.js Express development
@@ -61,17 +61,23 @@ metadata:
     vcs-type: git
     vendor: Kabanero
     version: 0.2.10
+    sidecar.istio.io/inject: "true"
   creationTimestamp: null
   labels:
     image.opencontainers.org/title: service-a
     stack.appsody.dev/id: nodejs-express
     stack.appsody.dev/version: 0.2.10
+    app: service-a
+    version: v1
   name: service-a
   namespace: cloudlab
 spec:
   applicationImage: dev.local/service-a
   createKnativeService: false
   expose: true
+  envFrom:
+  - configMapRef:
+      name: jaeger-config
   livenessProbe:
     failureThreshold: 12
     httpGet:

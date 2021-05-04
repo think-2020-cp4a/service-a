@@ -1,7 +1,32 @@
+---
+apiVersion: v1
+items:
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: docker-image-service-a-v1
+  spec:
+    params:
+    - name: url
+      value: image-registry.openshift-image-registry.svc:5000/cloudlab/service-a
+    type: image
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: git-source-service-a-v1
+  spec:
+    params:
+    - name: revision
+      value: v1
+    - name: url
+      value: https://github.com/think-2020-cp4a/service-a.git
+    type: git
+kind: List
+---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
-  name: nodejs-pipeline-run-v1
+  name: service-a-pipeline-run-v1
 spec:
   params:
   - name: event-type
